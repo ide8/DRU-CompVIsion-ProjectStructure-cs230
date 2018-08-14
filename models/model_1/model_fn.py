@@ -25,7 +25,7 @@ def build_model(is_training, inputs, params):
     num_channels = params.num_channels
     bn_momentum = params.bn_momentum
     
-    channels = [num_channels, num_channels * 2, num_channels * 4, num_channels * 8, num_channels * 16]
+    channels = [num_channels, num_channels * 2, num_channels * 4, num_channels * 8]
 
     for i, c in enumerate(channels):
         with tf.variable_scope('block_{}'.format(i+1)):
@@ -35,12 +35,12 @@ def build_model(is_training, inputs, params):
             out = tf.nn.relu(out)
             out = tf.layers.max_pooling2d(out, 2, 2)
 
-    assert out.get_shape().as_list() == [None, 2, 2, num_channels * 16]
+    assert out.get_shape().as_list() == [None, 4, 4, num_channels * 8]
 
-    out = tf.reshape(out, [-1, 2 * 2 * num_channels * 16])
+    out = tf.reshape(out, [-1, 4 * 4 * num_channels * 8])
 
     with tf.variable_scope('fc_1'):
-        out = tf.layers.dense(out, num_channels * 16)
+        out = tf.layers.dense(out, num_channels * 8)
         if params.use_batch_norm:
             out = tf.layers.batch_normalization(out, momentum=bn_momentum, training=is_training)
         out = tf.nn.relu(out)

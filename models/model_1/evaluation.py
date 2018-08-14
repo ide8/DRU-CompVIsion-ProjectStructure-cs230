@@ -6,7 +6,7 @@ import os
 from tqdm import trange
 import tensorflow as tf
 
-from model.utils import save_dict_to_json
+from helpers.utils import save_dict_to_json
 
 
 def evaluate_sess(sess, model_spec, num_steps, writer=None, params=None):

@@ -6,8 +6,8 @@ import os
 from tqdm import trange
 import tensorflow as tf
 
-from model.utils import save_dict_to_json
-from model.evaluation import evaluate_sess
+from helpers.utils import save_dict_to_json
+from .evaluation import evaluate_sess
 
 
 def train_sess(sess, model_spec, num_steps, writer, params):
@@ -118,3 +118,6 @@ def train_and_evaluate(train_model_spec, eval_model_spec, model_dir, params, res
             # Save latest eval metrics in a json file in the model directory
             last_json_path = os.path.join(model_dir, "metrics_eval_last_weights.json")
             save_dict_to_json(metrics, last_json_path)
+
+    # Reset the graph after training and evaluation - used in hyper parameters search
+    tf.reset_default_graph()
